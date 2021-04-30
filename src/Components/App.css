@@ -1,0 +1,137 @@
+.Squat {
+  text-align: center;
+}
+
+.Squat-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+.Squat-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.Squat-link {
+  color: #61dafb;
+}
+
+#nav-parent {
+  background: rgb(255, 255, 255);
+  color: black;
+  width: 100%;
+  box-shadow: rgb(0 0 0 / 20%) 0px 0px 10px 0px;
+  font-size: 18px;
+  line-height: 1;
+  z-index: 1;
+  top: 0px;
+  height: 50px;
+}
+
+#Navbar {
+  margin: 0px auto;
+  max-width: 1010px;
+  padding: 0px 10px;
+  position: relative;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+#logo {
+  background-color: #c2e7d9;
+  background-image: url('https://cdn.dribbble.com/users/533108/screenshots/1635143/fire.gif');
+  background-blend-mode: multiply;
+  background-size: contain;
+  height: 540px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin: 0px auto;
+  height: calc(100vh - 150px);
+  position: relative;
+  padding: 10px;
+}
+#logo-img {
+  width: 480px;
+  height: 500px;
+  margin: auto;
+  background-color: #c2e7d9;
+}
+
+#logo-text {
+  text-align: center;
+  color: white;
+  margin: auto;
+}
+
+#get-started {
+  background-color: yellow;
+  width: 100px;
+  height: 35px;
+  transition: 0.3s;
+  margin: auto;
+}
+
+#get-started:hover {
+  background-color: white;
+}
+
+a {
+  color: black;
+  font-style: normal;
+  text-decoration: none;
+}
+
+#counter {
+  padding: 1rem;
+  margin: 1rem;
+  border-radius: 2em;
+  box-shadow: 1px 2px 2px #0d3b66;
+  background-color: #ffd3ba;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #0d3b66;
+}
+
+#counter-button {
+  padding: 1rem;
+  margin: auto;
+  border-radius: 2em;
+  box-shadow: 1px 2px 2px #0d3b66;
+  background-color: #ffd3ba;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #0d3b66;
+  width: 3rem;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+#text {
+  margin-top: 7%;
+}
+
+#dashboard {
+  display: inline-block;
+  background-color: #c2e7d9;
+  height: auto;
+}
+
+#user-information {
+  display: block;
+  flex: 1 1 0%;
+  line-height: 1;
+  background: white;
+  padding: 20px 0px;
+  color: rgb(51, 51, 51) !important;
+  text-decoration: none !important;
+}
