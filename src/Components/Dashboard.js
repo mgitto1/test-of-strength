@@ -163,6 +163,11 @@ export class Dashboard extends React.Component {
           </div>
           <div id="test-results">
             <h1>Results</h1>
+            <i>
+              If your latest results don't show up redirect to the home page and
+              come back to see them!
+            </i>
+            <br />
             <table id="table-text">
               <tbody>
                 <tr>
