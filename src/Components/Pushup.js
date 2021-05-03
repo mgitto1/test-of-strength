@@ -8,8 +8,8 @@ import Counter from './Counter';
 import Typical from 'react-typical';
 // import Counter from './Counter';
 
-const Squat = () => {
-  localStorage.setItem('workout', 'squats');
+const Pushup = () => {
+  localStorage.setItem('workout', 'pushups');
   const webcamRef = useRef(null);
 
   const runPosenet = async () => {
@@ -44,15 +44,16 @@ const Squat = () => {
 
       // Make Detections
       const pose = await net.estimateSinglePose(video);
-      let leftShoulder = pose.keypoints[5].position.y;
-      let rightShoulder = pose.keypoints[6].position.y;
+
+      let leftEye = pose.keypoints[1].position.y;
+      let rightEye = pose.keypoints[2].position.y;
 
       // Calculate user position
       const calculateAvg = (avgPosition, helperObj) => {
         if (pose.score > 0.5 && count <= 50) {
           console.log('calculating');
-          avgPosition.push(leftShoulder);
-          avgPosition.push(rightShoulder);
+          avgPosition.push(leftEye);
+          avgPosition.push(rightEye);
           const sum = avgPosition.reduce((a, b) => a + b, 0);
           helperObj.avg = sum / avgPosition.length || 0;
           helperObj.count = count;
@@ -64,11 +65,11 @@ const Squat = () => {
       };
 
       //Once user positition is calculated, use position to determine up and down
-      const squat = () => {
-        let squatObj = calculateAvg(avgPosition, helperObj);
-        if (squatObj.count === 50) {
+      const pushup = () => {
+        let pushupObj = calculateAvg(avgPosition, helperObj);
+        if (pushupObj.count === 50) {
           console.log('running');
-          if (leftShoulder && rightShoulder <= squatObj.avg + 100) {
+          if (leftEye && rightEye <= pushupObj.avg + 100) {
             position = 'up';
           } else {
             position = 'down';
@@ -77,11 +78,12 @@ const Squat = () => {
       };
 
       //Run function when pose score is good and avg is calculated
-      if (pose.score > 0.4 && squat()) {
-        squat();
+      if (pose.score > 0.3 && pushup()) {
+        pushup();
       }
     }
   };
+
   function check3(array, str) {
     return array.some(function (a, i, aa) {
       if (
@@ -93,23 +95,21 @@ const Squat = () => {
         a === aa[i - 1]
       ) {
         clearInterval(str);
-        localStorage.setItem('position', JSON.stringify([]));
       }
     });
   }
 
   const countFunc = () => {
-    let squats = [];
+    let pushups = [];
     localStorage.setItem('position', JSON.stringify([]));
     let intervalId = setInterval(() => {
-      squats = JSON.parse(localStorage.getItem('position'));
+      pushups = JSON.parse(localStorage.getItem('position'));
       if (position) {
-        squats.push(position);
-        console.log(squats);
-        localStorage.setItem('position', JSON.stringify(squats));
+        pushups.push(position);
+        localStorage.setItem('position', JSON.stringify(pushups));
       }
-      check3(squats, intervalId);
-    }, 3000);
+      check3(pushups, intervalId);
+    }, 2500);
   };
 
   countFunc();
@@ -123,17 +123,20 @@ const Squat = () => {
               loop={1}
               wrapper="b"
               steps={[
-                'For this test you will be doing squats...',
+                'This time you will be doing pushups.',
                 2000,
-                'Please step in front of the camera to get started.',
-                5000,
-                'You must hold each position for 3 seconds for the exercise to count.',
+                'Place your laptop on the floor and kneel in front of the camera to get started.',
+                3000,
+                'You must keep your eyes in view of the camera and hold each position for 2 seconds for the exercise to count.',
                 Infinity,
               ]}
             />
             <br />
             <br />
-            <i>Be sure to click on the counter to submit your score</i>
+            <i>
+              Be sure to click on the counter to submit your score when you are
+              done
+            </i>
           </div>
           <Webcam
             ref={webcamRef}
@@ -158,4 +161,4 @@ const Squat = () => {
   );
 };
 
-export default Squat;
+export default Pushup;

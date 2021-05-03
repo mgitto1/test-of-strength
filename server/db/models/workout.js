@@ -8,7 +8,7 @@ const Workout = db.define('workout', {
   pushups: {
     type: Sequelize.INTEGER,
   },
-  situps: {
+  dips: {
     type: Sequelize.INTEGER,
   },
 });

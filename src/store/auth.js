@@ -20,6 +20,10 @@ export const me = () => async (dispatch) => {
   const token = window.localStorage.getItem(TOKEN);
   if (token) {
     const res = await axios.get('/auth/me', {
+      proxy: {
+        host: 'localhost',
+        port: 8080,
+      },
       headers: {
         authorization: token,
       },
@@ -28,33 +32,75 @@ export const me = () => async (dispatch) => {
   }
 };
 
-export const authenticate = (email, password, method) => async (dispatch) => {
+export const authenticate = (username, password, method) => async (
+  dispatch
+) => {
   try {
-    const res = await axios.post(`/auth/${method}`, { email, password });
+    const res = await axios.post(`/auth/${method}`, { username, password });
     window.localStorage.setItem(TOKEN, res.data.token);
     dispatch(me());
     const token = window.localStorage.getItem('token');
+    const localSquats =
+      Number(window.localStorage.getItem('squatCount')) || null;
+    const localPushups =
+      Number(window.localStorage.getItem('pushupCount')) || null;
+    const localDip = Number(window.localStorage.getItem('dipCount')) || null;
     const sendData = {
       headers: {
         authorization: token,
       },
     };
-    const cart = JSON.parse(localStorage.getItem('cart'));
-    if (cart) {
-      for (let i = 0; i < cart.length; i++) {
-        let item = cart[i];
-        await axios.post(
-          `/api/cart/`,
-          { productId: item.product.id, quantityInCart: item.quantityInCart },
-          sendData
-        );
-      }
-      localStorage.removeItem('cart');
-      history.push('/cart');
-
-      return;
+    if (localPushups || localDip || localSquats) {
+      axios.post(
+        '/api/workouts/',
+        {
+          squats: localSquats,
+          pushups: localPushups,
+          dips: localDip,
+        },
+        sendData
+      );
     }
-    history.push('/products');
+    history.push('/');
+  } catch (authError) {
+    return dispatch(setAuth({ error: authError }));
+  }
+};
+
+export const authenticateSignup = (username, password, method, name) => async (
+  dispatch
+) => {
+  try {
+    const res = await axios.post(`/auth/signup`, {
+      username,
+      password,
+      name,
+    });
+    window.localStorage.setItem(TOKEN, res.data.token);
+    dispatch(me());
+    const token = window.localStorage.getItem('token');
+    const localSquats =
+      Number(window.localStorage.getItem('squatCount')) || null;
+    const localPushups =
+      Number(window.localStorage.getItem('pushupCount')) || null;
+    const localDip = Number(window.localStorage.getItem('dipCount')) || null;
+    const sendData = {
+      headers: {
+        authorization: token,
+      },
+    };
+    if (localPushups || localDip || localSquats) {
+      axios.post(
+        '/api/workouts/',
+        {
+          squats: localSquats,
+          pushups: localPushups,
+          dips: localDip,
+        },
+        sendData
+      );
+    }
+    history.push('/');
   } catch (authError) {
     return dispatch(setAuth({ error: authError }));
   }
@@ -62,7 +108,12 @@ export const authenticate = (email, password, method) => async (dispatch) => {
 
 export const logout = () => {
   window.localStorage.removeItem(TOKEN);
-  history.push('/login');
+  localStorage.removeItem('dipCount');
+  localStorage.removeItem('squatCount');
+  localStorage.removeItem('pushupCount');
+  localStorage.removeItem('workout');
+  localStorage.removeItem('position');
+  window.location.reload();
   return {
     type: SET_AUTH,
     auth: {},

@@ -1,41 +1,78 @@
+import axios from 'axios';
 import React from 'react';
+import history from '../history';
 
 class Counter extends React.Component {
+  intervalId = 0;
   constructor(props) {
     super(props);
     this.counterFunction = this.counterFunction.bind(this);
     this.handleClick = this.handleClick.bind(this);
     this.state = {
-      squatArr: JSON.parse(localStorage.getItem('squats')),
-      squatCount: 0,
+      workoutArr: JSON.parse(localStorage.getItem('position')),
+      workoutCount: 0,
       nextPosition: '',
     };
   }
   handleClick() {
     if (window.confirm('Are you sure you want to quit now?')) {
-      console.log('all done');
-    } else {
-      console.log('keep going');
+      const token = window.localStorage.getItem('token');
+      const sendData = {
+        headers: {
+          authorization: token,
+        },
+      };
+      if (localStorage.getItem('workout') === 'squats') {
+        localStorage.setItem('squatCount', this.state.workoutCount);
+        axios.post(
+          '/api/workouts/',
+          { squats: this.state.workoutCount },
+          sendData
+        );
+        history.push('/dashboard');
+      } else if (localStorage.getItem('workout') === 'pushups') {
+        localStorage.setItem('pushupCount', this.state.workoutCount);
+        axios.post(
+          '/api/workouts/',
+          { pushups: this.state.workoutCount },
+          sendData
+        );
+        history.push('/dashboard');
+      } else if (localStorage.getItem('workout') === 'dips') {
+        localStorage.setItem('dipCount', this.state.workoutCount);
+        axios.post(
+          '/api/workouts/',
+          { dips: this.state.workoutCount },
+          sendData
+        );
+        history.push('/dashboard');
+      } else {
+        console.log('keep going');
+      }
     }
   }
 
   componentDidMount() {
-    setInterval(this.counterFunction, 1000);
+    this.intervalId = setInterval(this.counterFunction, 1000);
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.intervalId);
   }
   counterFunction() {
-    this.setState({ squatArr: JSON.parse(localStorage.getItem('squats')) });
-    let squats = this.state.squatArr;
-    let squatCount = this.state.squatCount;
-    for (let i = 0; i < squats.length; i++) {
-      if (squats[i - 1] === 'down' && squats[i] === 'up') {
-        squats = squats.slice(2);
-        this.setState({ squatArr: squats });
-        this.setState({ squatCount: squatCount + 1 });
-        localStorage.setItem('squats', JSON.stringify(squats));
+    this.setState({ workoutArr: JSON.parse(localStorage.getItem('position')) });
+    let position = this.state.workoutArr;
+    let workoutCount = this.state.workoutCount;
+    for (let i = 0; i < position.length; i++) {
+      if (position[i - 1] === 'down' && position[i] === 'up') {
+        position = position.slice(2);
+        this.setState({ workoutArr: position });
+        this.setState({ workoutCount: workoutCount + 1 });
+        localStorage.setItem('position', JSON.stringify(position));
       }
-      if (squats[i] === 'up') {
+      if (position[i] === 'up') {
         this.setState({ nextPosition: 'Down' });
-      } else if (squats[i] === 'down') {
+      } else if (position[i] === 'down') {
         this.setState({ nextPosition: 'Up' });
       } else {
         this.setState({ nextPosition: 'Down' });
@@ -55,7 +92,7 @@ class Counter extends React.Component {
         )}
 
         <button id="counter-button" onClick={this.handleClick}>
-          {this.state.squatCount}
+          {this.state.workoutCount}
         </button>
       </div>
     );

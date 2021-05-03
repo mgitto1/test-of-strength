@@ -1,16 +1,19 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { authenticate } from '../store';
+import { authenticate, authenticateSignup } from '../store';
 
 /**
  * COMPONENT
  */
 const AuthForm = (props) => {
-  const { name, displayName, handleSubmit, error } = props;
-
+  const { name, displayName, handleLogin, handleSignup, error } = props;
   return (
     <div id="login-window">
-      <form onSubmit={handleSubmit} name={name} id="login-form">
+      <form
+        onSubmit={name === 'login' ? handleLogin : handleSignup}
+        name={name}
+        id="login-form"
+      >
         {error && error.response && <p> {error.response.data} </p>}
         <div className="input-div">
           <label htmlFor="email">
@@ -18,6 +21,16 @@ const AuthForm = (props) => {
           </label>
           <input name="email" type="text" className="login-input" />
         </div>
+        {name === 'signup' ? (
+          <div className="input-div">
+            <label htmlFor="name">
+              <small>Name</small>
+            </label>
+            <input name="name" type="text" className="login-input" />
+          </div>
+        ) : (
+          ''
+        )}
         <div className="input-div">
           <label htmlFor="password">
             <small>Password</small>
@@ -57,12 +70,20 @@ const mapSignup = (state) => {
 
 const mapDispatch = (dispatch) => {
   return {
-    handleSubmit(evt) {
+    handleLogin(evt) {
       evt.preventDefault();
       const formName = evt.target.name;
       const email = evt.target.email.value;
       const password = evt.target.password.value;
       dispatch(authenticate(email, password, formName));
+    },
+    handleSignup(evt) {
+      evt.preventDefault();
+      const formName = evt.target.name;
+      const email = evt.target.email.value;
+      const password = evt.target.password.value;
+      const name = evt.target.name.value;
+      dispatch(authenticateSignup(email, password, formName, name));
     },
   };
 };

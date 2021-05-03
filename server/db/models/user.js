@@ -1,5 +1,6 @@
 const Sequelize = require('sequelize');
 const db = require('../db');
+require('dotenv').config();
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const axios = require('axios');
@@ -11,7 +12,7 @@ const User = db.define('user', {
     type: Sequelize.STRING,
     allowNull: false,
   },
-  email: {
+  username: {
     type: Sequelize.STRING,
     unique: true,
     allowNull: false,
@@ -29,56 +30,56 @@ module.exports = User;
 
 // /**
 //  * instanceMethods
-//  */
-// User.prototype.correctPassword = function (candidatePwd) {
-//   //we need to compare the plain version to an encrypted version of the password
-//   return bcrypt.compare(candidatePwd, this.password);
-// };
 
-// User.prototype.generateToken = function () {
-//   return jwt.sign({ id: this.id }, 'shhh');
-// };
+User.prototype.correctPassword = function (candidatePwd) {
+  return bcrypt.compare(candidatePwd, this.password);
+};
 
-// /**
-//  * classMethods
-//  */
-// User.authenticate = async function ({ email, password }) {
-//   const user = await this.findOne({ where: { email } });
-//   if (!user || !(await user.correctPassword(password))) {
-//     const error = Error('Incorrect username/password');
-//     error.status = 401;
-//     throw error;
-//   }
-//   return user.generateToken();
-// };
+User.prototype.generateToken = function () {
+  return jwt.sign({ id: this.id }, process.env.SECRET);
+};
 
-// User.findByToken = async function (token) {
-//   try {
-//     const { id } = await jwt.verify(token, 'shhh');
-//     const user = User.findByPk(id);
-//     if (!user) {
-//       throw 'nooo';
-//     }
-//     return user;
-//   } catch (ex) {
-//     const error = Error('bad token');
-//     error.status = 401;
-//     throw error;
-//   }
-// };
+/**
+ * classMethods
+ */
+User.authenticate = async function ({ username, password }) {
+  const user = await this.findOne({ where: { username } });
+  if (!user || !(await user.correctPassword(password))) {
+    const error = Error('Incorrect username/password');
+    error.status = 401;
+    throw error;
+  }
+  return user.generateToken();
+};
 
-// /**
-//  * hooks
-//  */
-// const hashPassword = async (user) => {
-//   //in case the password has been changed, we want to encrypt it with bcrypt
-//   if (user.changed('password')) {
-//     user.password = await bcrypt.hash(user.password, SALT_ROUNDS);
-//   }
-// };
+User.findByToken = async function (token) {
+  try {
+    const { id } = await jwt.verify(token, process.env.SECRET);
+    const user = User.findByPk(id);
+    if (!user) {
+      throw 'nooo';
+    }
+    return user;
+  } catch (ex) {
+    const error = Error('bad token');
+    error.status = 401;
+    throw error;
+  }
+};
 
-// User.beforeCreate(hashPassword);
-// User.beforeUpdate(hashPassword);
-// User.beforeBulkCreate((users) => {
-//   users.forEach(hashPassword);
-// });
+/**
+ * hooks
+ */
+const hashPassword = async (user) => {
+  console.log('hashing');
+  //in case the password has been changed, we want to encrypt it with bcrypt
+  if (user.changed('password')) {
+    user.password = await bcrypt.hash(user.password, SALT_ROUNDS);
+  }
+};
+
+User.beforeCreate(hashPassword);
+User.beforeUpdate(hashPassword);
+User.beforeBulkCreate((users) => {
+  users.forEach(hashPassword);
+});

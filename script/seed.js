@@ -8,43 +8,38 @@ const { db, User, Workout } = require('../server/db');
 
 async function seed() {
   await db.sync({ force: true }); // clears db and matches models to tables
-  const users = await User.bulkCreate([
-    {
-      name: 'Harry',
-      email: 'harry@gmail.com',
-      password: 123,
-    },
-    {
-      name: 'Gene',
-      email: 'gene@gmail.com',
-      password: 123,
-    },
-    {
+  const users = await Promise.all([
+    User.create({ name: 'Cody', username: 'cody@gmail.com', password: '123' }),
+    User.create({
+      name: 'Murphy',
+      username: 'murphy@gmail.com',
+      password: '123',
+    }),
+    User.create({
       name: 'Kerri',
-      email: 'kerri@gmail.com',
-      password: 123,
-    },
+      username: 'kerri@gmail.com',
+      password: '123',
+    }),
   ]);
 
   const workouts = await Workout.bulkCreate([
     {
       squats: 20,
-      pushups: 30,
-      situps: 10,
+      pushups: 0,
+      dips: 0,
     },
     {
-      squats: 30,
+      squats: 0,
       pushups: 20,
-      situps: 20,
+      dips: 0,
     },
     {
-      squats: 10,
-      pushups: 20,
-      situps: 30,
+      squats: 0,
+      pushups: 0,
+      dips: 30,
     },
   ]);
 
-  console.log(workouts[0].__proto__);
   await workouts[0].setUser(users[0]);
   await workouts[1].setUser(users[0]);
 
