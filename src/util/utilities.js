@@ -43,6 +43,27 @@ export function updateTryResNetButtonDatGuiCss() {
   );
 }
 
+
+export function percentRank(arr, v) {
+  if (typeof v !== 'number') throw new TypeError('v must be a number');
+  if (v === 0) {
+    return;
+  } else {
+    for (var i = 0, l = arr.length; i < l; i++) {
+      if (v <= arr[i]) {
+        while (i < l && v === arr[i]) i++;
+        if (i === 0) return 0;
+        if (v !== arr[i - 1]) {
+          i += (v - arr[i - 1]) / (arr[i] - arr[i - 1]);
+        }
+        return i / l;
+      }
+    }
+    return 1;
+  }
+}
+
+
 /**
  * Toggles between the loading UI and the main canvas UI.
  */
@@ -203,27 +224,3 @@ function drawPoints(ctx, points, radius, color) {
     }
   }
 }
-
-/**
- * Draw offset vector values, one of the model outputs, on to the canvas
- * Read our blog post for a description of PoseNet's offset vector outputs
- * https://medium.com/tensorflow/real-time-human-pose-estimation-in-the-browser-with-tensorflow-js-7dd0bc881cd5
- */
-// export function drawOffsetVectors(
-//     heatMapValues, offsets, outputStride, scale = 1, ctx) {
-//   const offsetPoints =
-//       posenet.singlePose.getOffsetPoints(heatMapValues, outputStride, offsets);
-
-//   const heatmapData = heatMapValues.buffer().values;
-//   const offsetPointsData = offsetPoints.buffer().values;
-
-//   for (let i = 0; i < heatmapData.length; i += 2) {
-//     const heatmapY = heatmapData[i] * outputStride;
-//     const heatmapX = heatmapData[i + 1] * outputStride;
-//     const offsetPointY = offsetPointsData[i];
-//     const offsetPointX = offsetPointsData[i + 1];
-
-//     drawSegment(
-//         [heatmapY, heatmapX], [offsetPointY, offsetPointX], color, scale, ctx);
-//   }
-// }

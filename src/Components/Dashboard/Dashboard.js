@@ -5,7 +5,9 @@ import { Link } from 'react-router-dom';
 import Quotes from '../../util/quotes';
 import { fetchWorkout } from '../../store/workouts';
 import Bar from './Bar';
+import Tiles from './Tiles';
 import dateformat from 'dateformat';
+import { percentRank } from '../../util/utilities';
 
 export class Dashboard extends React.Component {
   constructor(props) {
@@ -19,30 +21,12 @@ export class Dashboard extends React.Component {
       maxDip: 0,
     };
     this.calculate = this.calculate.bind(this);
-    this.percentRank = this.percentRank.bind(this);
+    this.percentRank = percentRank.bind(this);
   }
   componentDidMount() {
     this.props.getWorkout();
     this.calculate();
     this.calculateRank();
-  }
-  percentRank(arr, v) {
-    if (typeof v !== 'number') throw new TypeError('v must be a number');
-    if (v === 0) {
-      return;
-    } else {
-      for (var i = 0, l = arr.length; i < l; i++) {
-        if (v <= arr[i]) {
-          while (i < l && v === arr[i]) i++;
-          if (i === 0) return 0;
-          if (v !== arr[i - 1]) {
-            i += (v - arr[i - 1]) / (arr[i] - arr[i - 1]);
-          }
-          return i / l;
-        }
-      }
-      return 1;
-    }
   }
 
   async calculateRank() {
@@ -93,49 +77,7 @@ export class Dashboard extends React.Component {
     const { maxSquat } = this.state || 0;
     return (
       <div id="dashboard">
-        <div id="tiles">
-          <Link to="/squats">
-            <div id="mini-individual-tile">
-              <img
-                src="https://img.icons8.com/ios/452/squats.png"
-                id="tile-pic"
-                alt="squat-icon"
-              />
-            </div>
-          </Link>
-          <Link to="/pushups">
-            <div id="mini-individual-tile">
-              <img
-                src="https://cdn.iconscout.com/icon/premium/png-512-thumb/pushups-560460.png"
-                id="tile-pic"
-                alt="pushup-icon"
-              />
-            </div>
-          </Link>
-          <Link to="/dips">
-            <div id="mini-individual-tile">
-              <img
-                src="https://cdn.iconscout.com/icon/premium/png-256-thumb/bench-dips-2-871091.png"
-                id="tile-pic"
-                alt="dip-icon"
-              />
-            </div>
-          </Link>
-          <div id="mini-individual-tile">
-            <img
-              src="https://i.pinimg.com/originals/40/fa/69/40fa69e6aa6319b5e70b566c493a4ab1.jpg"
-              id="tile-pic"
-              alt="coming-soon-icon"
-            />
-          </div>
-          <div id="mini-individual-tile">
-            <img
-              src="https://i.pinimg.com/originals/40/fa/69/40fa69e6aa6319b5e70b566c493a4ab1.jpg"
-              id="tile-pic"
-              alt="coming-soon-icon"
-            />
-          </div>
-        </div>
+        <Tiles />
         <div id="content">
           <div id="user-info">
             <h3>Welcome</h3>
@@ -172,7 +114,7 @@ export class Dashboard extends React.Component {
                 <tr>
                   <th>Test</th>
                   <th>Actions</th>
-                  <th>{this.state.name ? 'High' : 'Latest'} Score</th>
+                  <th>{this.props.name ? 'High' : 'Latest'} Score</th>
                   <th>Percentile</th>
                 </tr>
                 <tr id="odd-row">

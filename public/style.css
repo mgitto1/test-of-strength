@@ -132,7 +132,6 @@ a {
 }
 
 #individual-tile:hover {
-  padding: 25px;
   box-shadow: rgb(0 0 0 / 10%) 0px 2px 5px;
   border-style: solid;
   border-radius: 5px;

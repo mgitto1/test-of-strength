@@ -17,11 +17,17 @@ class WorkoutPlan extends React.Component {
 
   render() {
     return (
-    <div>
-      <h1>Page under construcion</h1>
-      <h2>Are you interested in getting stronger?</h2>
-    </div>
-    )
+      <div
+        style={{
+          textAlign: 'center',
+          marginTop: '100px',
+        }}
+      >
+        <h1>Page under construcion</h1>
+        <h2>Are you interested in getting stronger?</h2>
+        <h3>Stay tuned for personalized workout plans</h3>
+      </div>
+    );
   }
 }
 
