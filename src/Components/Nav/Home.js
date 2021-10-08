@@ -1,10 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import history from '../history';
+import history from '../../util/history';
 import Typical from 'react-typical';
-import Quotes from '../quotes';
+import Quotes from '../../util/quotes';
 import { Link } from 'react-router-dom';
-import { fetchWorkout } from '../store/workouts';
+import { fetchWorkout } from '../../store/workouts';
 
 class Home extends React.Component {
   constructor(props) {

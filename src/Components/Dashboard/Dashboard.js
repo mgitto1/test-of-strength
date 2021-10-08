@@ -1,10 +1,9 @@
-import { render } from '@testing-library/react';
 import axios from 'axios';
 import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import Quotes from '../quotes';
-import { fetchWorkout } from '../store/workouts';
+import Quotes from '../../util/quotes';
+import { fetchWorkout } from '../../store/workouts';
 import Bar from './Bar';
 import dateformat from 'dateformat';
 
@@ -493,7 +492,7 @@ export class Dashboard extends React.Component {
                             ? 'Pushups'
                             : workout.dips
                             ? 'Dips'
-                            : ''}
+                            : 'No repititions recorded'}
                         </th>
                         <th>{dateformat(workout.createdAt)}</th>
                         <th>

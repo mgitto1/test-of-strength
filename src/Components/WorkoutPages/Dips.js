@@ -1,12 +1,10 @@
 import React, { useRef } from 'react';
-// import '../public/style.css';
 // eslint-disable-next-line
 import * as tf from '@tensorflow/tfjs';
 import * as posenet from '@tensorflow-models/posenet';
 import Webcam from 'react-webcam';
 import Counter from './Counter';
 import Typical from 'react-typical';
-// import Counter from './Counter';
 
 const Dips = () => {
   localStorage.setItem('workout', 'dips');

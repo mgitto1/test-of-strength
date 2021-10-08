@@ -1,8 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { logout } from '../store';
-import history from '../history';
+import { logout } from '../../store';
+import history from '../../util/history';
 
 class Navbar extends React.Component {
   constructor(props) {
@@ -38,6 +38,13 @@ class Navbar extends React.Component {
                 className={'/dashboard' === location ? 'selected' : ''}
               >
                 Dashboard
+              </Link>
+              <Link
+                to="/workout-plan"
+                onClick={this.handleClick}
+                className={'/workout-plan' === location ? 'selected' : ''}
+              >
+                Workout Plan
               </Link>
               <a href="#" onClick={this.props.handleClick}>
                 Logout

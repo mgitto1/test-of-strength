@@ -1,14 +1,15 @@
 import React from 'react';
 import { withRouter, Route, Switch, Redirect } from 'react-router-dom';
-import Dashboard from './Components/Dashboard';
-import Home from './Components/Home';
-import Squat from './Components/Squat';
-import Test from './Components/Test';
-import { Login, Signup } from './Components/AuthForm';
+import Dashboard from './Components/Dashboard/Dashboard';
+import Home from './Components/Nav/Home';
+import Squat from './Components/WorkoutPages/Squat';
+import Test from './Components/DummyPage';
+import { Login, Signup } from './Components/Auth/AuthForm';
 import { me } from './store';
 import { connect } from 'react-redux';
-import Pushup from './Components/Pushup';
-import Dips from './Components/Dips';
+import Pushup from './Components/WorkoutPages/Pushup';
+import Dips from './Components/WorkoutPages/Dips';
+import WorkoutPlan from './Components/WorkoutPlan';
 
 class Routes extends React.Component {
   componentDidMount() {
@@ -26,6 +27,7 @@ class Routes extends React.Component {
           <Route path="/pushups" component={Pushup} />
           <Route path="/dips" component={Dips} />
           <Route path="/test" component={Test} />
+          <Route path="/workout-plan" component={WorkoutPlan} />
           <Redirect to="/" />
         </Switch>
       </div>
