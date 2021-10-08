@@ -10,6 +10,7 @@ import Typical from 'react-typical';
 
 const Pushup = () => {
   localStorage.setItem('workout', 'pushups');
+  localStorage.setItem('WorkingOut', 'true');
   const webcamRef = useRef(null);
 
   const runPosenet = async () => {
@@ -84,21 +85,6 @@ const Pushup = () => {
     }
   };
 
-  function check3(array, str) {
-    return array.some(function (a, i, aa) {
-      if (
-        i > 1 &&
-        a === aa[i - 5] &&
-        a === aa[i - 4] &&
-        a === aa[i - 3] &&
-        a === aa[i - 2] &&
-        a === aa[i - 1]
-      ) {
-        clearInterval(str);
-      }
-    });
-  }
-
   const countFunc = () => {
     let pushups = [];
     localStorage.setItem('position', JSON.stringify([]));
@@ -108,7 +94,8 @@ const Pushup = () => {
         pushups.push(position);
         localStorage.setItem('position', JSON.stringify(pushups));
       }
-      check3(pushups, intervalId);
+      if (localStorage.getItem('WorkingOut') === 'false')
+        clearInterval(intervalId);
     }, 2500);
   };
 

@@ -8,6 +8,7 @@ import Typical from 'react-typical';
 
 const Dips = () => {
   localStorage.setItem('workout', 'dips');
+  localStorage.setItem('WorkingOut', 'true');
   const webcamRef = useRef(null);
 
   const runPosenet = async () => {
@@ -82,21 +83,6 @@ const Dips = () => {
     }
   };
 
-  function check3(array, str) {
-    return array.some(function (a, i, aa) {
-      if (
-        i > 1 &&
-        a === aa[i - 5] &&
-        a === aa[i - 4] &&
-        a === aa[i - 3] &&
-        a === aa[i - 2] &&
-        a === aa[i - 1]
-      ) {
-        clearInterval(str);
-      }
-    });
-  }
-
   const countFunc = () => {
     let dips = [];
     localStorage.setItem('position', JSON.stringify([]));
@@ -106,7 +92,8 @@ const Dips = () => {
         dips.push(position);
         localStorage.setItem('position', JSON.stringify(dips));
       }
-      check3(dips, intervalId);
+      if (localStorage.getItem('WorkingOut') === 'false')
+        clearInterval(intervalId);
     }, 2500);
   };
 

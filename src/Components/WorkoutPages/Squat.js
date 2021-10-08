@@ -10,6 +10,8 @@ import Typical from 'react-typical';
 
 const Squat = () => {
   localStorage.setItem('workout', 'squats');
+  localStorage.setItem('WorkingOut', 'true');
+  localStorage.removeItem('CameraStatus');
   const webcamRef = useRef(null);
 
   const runPosenet = async () => {
@@ -50,7 +52,9 @@ const Squat = () => {
       // Calculate user position
       const calculateAvg = (avgPosition, helperObj) => {
         if (pose.score > 0.5 && count <= 50) {
+          localStorage.setItem('CameraStatus', 'Calculating');
           console.log('calculating');
+          console.log(pose.score);
           avgPosition.push(leftShoulder);
           avgPosition.push(rightShoulder);
           const sum = avgPosition.reduce((a, b) => a + b, 0);
@@ -67,7 +71,6 @@ const Squat = () => {
       const squat = () => {
         let squatObj = calculateAvg(avgPosition, helperObj);
         if (squatObj.count === 50) {
-          console.log('running');
           if (leftShoulder && rightShoulder <= squatObj.avg + 100) {
             position = 'up';
           } else {
@@ -82,21 +85,6 @@ const Squat = () => {
       }
     }
   };
-  function check3(array, str) {
-    return array.some(function (a, i, aa) {
-      if (
-        i > 1 &&
-        a === aa[i - 5] &&
-        a === aa[i - 4] &&
-        a === aa[i - 3] &&
-        a === aa[i - 2] &&
-        a === aa[i - 1]
-      ) {
-        clearInterval(str);
-        localStorage.setItem('position', JSON.stringify([]));
-      }
-    });
-  }
 
   const countFunc = () => {
     let squats = [];
@@ -105,10 +93,10 @@ const Squat = () => {
       squats = JSON.parse(localStorage.getItem('position'));
       if (position) {
         squats.push(position);
-        console.log(squats);
         localStorage.setItem('position', JSON.stringify(squats));
       }
-      check3(squats, intervalId);
+      if (localStorage.getItem('WorkingOut') === 'false')
+        clearInterval(intervalId);
     }, 3000);
   };
 

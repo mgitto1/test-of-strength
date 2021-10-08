@@ -18,6 +18,7 @@ class Counter extends React.Component {
       nextPosition: '',
     };
   }
+
   handleClick() {
     confirmAlert({
       title: 'Submit Workout',
@@ -68,37 +69,6 @@ class Counter extends React.Component {
         },
       ],
     });
-    // if (window.confirm('Are you sure you want to quit now?')) {
-    //   const token = window.localStorage.getItem('token');
-    //   const sendData = {
-    //     headers: {
-    //       authorization: token,
-    //     },
-    //   };
-    //   if (localStorage.getItem('workout') === 'squats') {
-    //     localStorage.setItem('squatCount', this.state.workoutCount);
-    //     axios.post(
-    //       '/api/workouts/',
-    //       { squats: this.state.workoutCount },
-    //       sendData
-    //     );
-    //     history.push('/dashboard');
-    //   } else if (localStorage.getItem('workout') === 'pushups') {
-    //     localStorage.setItem('pushupCount', this.state.workoutCount);
-    //     axios.post(
-    //       '/api/workouts/',
-    //       { pushups: this.state.workoutCount },
-    //       sendData
-    //     );
-    //     history.push('/dashboard');
-    //   } else if (localStorage.getItem('workout') === 'dips') {
-    //     localStorage.setItem('dipCount', this.state.workoutCount);
-    //     axios.post(
-    //       '/api/workouts/',
-    //       { dips: this.state.workoutCount },
-    //       sendData
-    //     );
-    //     history.push('/dashboard');
   }
 
   componentDidMount() {
@@ -113,6 +83,11 @@ class Counter extends React.Component {
     let position = this.state.workoutArr;
     let workoutCount = this.state.workoutCount;
     for (let i = 0; i < position.length; i++) {
+      if (position[i - 1] === position[i]) {
+        position = [];
+        this.setState({ workoutArr: [] });
+        localStorage.setItem('position', JSON.stringify(position));
+      }
       if (position[i - 1] === 'down' && position[i] === 'up') {
         position = position.slice(2);
         this.setState({ workoutArr: position });
@@ -131,13 +106,34 @@ class Counter extends React.Component {
 
   render() {
     return (
-      <div id="counter-text">
+      <div id="counter-area">
         {this.state.nextPosition ? (
           <p>
             Next Position: <strong>{this.state.nextPosition}</strong>
           </p>
+        ) : localStorage.getItem('CameraStatus') === 'Calculating' ? (
+          <p id="counter-text">Camera is calculating body position, smile!</p>
         ) : (
-          <p>Please allow camera to analyze position</p>
+          <p id="counter-text">
+            {localStorage.getItem('workout') === 'squats' ? (
+              <p>
+                {' '}
+                Please stand in front of the camera with both shoulders clearly
+                visible.{' '}
+              </p>
+            ) : localStorage.getItem('workout') === 'pushups' ? (
+              <p>
+                {' '}
+                Please get into a plank position with the camera in front of you{' '}
+              </p>
+            ) : (
+              <p>
+                {' '}
+                Please assume the beginning position for a dip with both
+                shoulders clearly visible{' '}
+              </p>
+            )}
+          </p>
         )}
 
         <button id="counter-button" onClick={this.handleClick}>

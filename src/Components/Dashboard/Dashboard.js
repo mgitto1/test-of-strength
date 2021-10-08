@@ -27,6 +27,7 @@ export class Dashboard extends React.Component {
     this.props.getWorkout();
     this.calculate();
     this.calculateRank();
+    localStorage.setItem('WorkingOut', 'false');
   }
 
   async calculateRank() {

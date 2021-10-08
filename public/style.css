@@ -172,6 +172,76 @@ a {
   margin-top: 7%;
 }
 
+#counter-text {
+  animation: fadeIn ease 2s infinite;
+  -webkit-animation: fadeIn ease 2s infinite;
+  -moz-animation: fadeIn ease 2s infinite;
+  -o-animation: fadeIn ease 2s infinite;
+  -ms-animation: fadeIn ease 2s infinite;
+}
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  25% {
+    opacity: 1;
+  }
+  75% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@-moz-keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@-webkit-keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@-o-keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@-ms-keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
 /* dashboard */
 #dashboard {
   background-image: url('https://thumbs.gfycat.com/RingedSpicyKodiakbear-size_restricted.gif');
