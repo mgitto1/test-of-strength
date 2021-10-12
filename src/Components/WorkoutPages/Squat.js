@@ -6,7 +6,6 @@ import * as posenet from '@tensorflow-models/posenet';
 import Webcam from 'react-webcam';
 import Counter from './Counter';
 import Typical from 'react-typical';
-// import Counter from './Counter';
 
 const Squat = () => {
   localStorage.setItem('workout', 'squats');
@@ -104,8 +103,8 @@ const Squat = () => {
   runPosenet();
   return (
     <div>
-      <div className="Squat">
-        <header className="Squat-header">
+      <div className="Squat-header">
+        <header className="Squat">
           <div id="text">
             <Typical
               loop={1}
@@ -123,6 +122,8 @@ const Squat = () => {
             <br />
             <i>Be sure to click on the counter to submit your score</i>
           </div>
+        </header>
+        <section className="Webcam-Area">
           <Webcam
             ref={webcamRef}
             style={{
@@ -137,10 +138,22 @@ const Squat = () => {
               height: 360,
             }}
           />
-          <div id="counter">
-            <Counter />
-          </div>
-        </header>
+          {/* <div>
+            <img
+              class="workout-example"
+              src="https://images.squarespace-cdn.com/content/v1/54f9e84de4b0d13f30bba4cb/1530743652042-8AW6T0MPM6Q0JYEV6AO9/image-asset.gif"
+              alt="squatting gif"
+              style={{
+                width: 260,
+                height: 260,
+                float: 'right',
+              }}
+            />
+          </div> */}
+        </section>
+        <div id="counter">
+          <Counter />
+        </div>
       </div>
     </div>
   );

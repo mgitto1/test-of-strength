@@ -61,6 +61,8 @@ class Counter extends React.Component {
             toast.info('Workout Posted!', {
               position: toast.POSITION.BOTTOM_RIGHT,
             });
+            localStorage.removeItem('CameraStatus');
+            localStorage.setItem('WorkingOut', 'false');
           },
         },
         {

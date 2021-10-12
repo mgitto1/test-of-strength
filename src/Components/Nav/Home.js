@@ -19,7 +19,6 @@ class Home extends React.Component {
   }
 
   componentDidMount() {
-    localStorage.setItem('WorkingOut', 'false');
     this.props.getWorkout();
   }
 
@@ -28,8 +27,18 @@ class Home extends React.Component {
       <div>
         <div id="logo">
           <div id="logo-text">
-            <h1>Test of Strength.</h1>Measure your strength and compete with the
-            world with these physical challenges.
+            <h1>Test of Strength.</h1>
+            {this.props.name ? (
+              <h3>
+                Measure your strength and compete with the world with these
+                physical challenges.
+              </h3>
+            ) : (
+              <h3>
+                Workout in front of your camera and perform as many repetitions
+                as possible in order to compete against other users.
+              </h3>
+            )}
             <br />
             <br />
             <br />
@@ -49,7 +58,7 @@ class Home extends React.Component {
                 : history.push('/dips');
             }}
           >
-            <strong>Get Started</strong>
+            <strong>Workout Now</strong>
           </button>
           <div id="logo-text">
             <Quotes />
