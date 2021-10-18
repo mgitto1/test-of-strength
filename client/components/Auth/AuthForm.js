@@ -1,6 +1,7 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import {authenticate, authenticateSignup} from '../../store'
+import {ToastContainer, toast} from 'react-toastify'
 
 /**
  * COMPONENT
@@ -41,11 +42,18 @@ const AuthForm = props => {
           {displayName}
         </button>
       </form>
+      <ToastContainer position="bottom-right" />
       {/* <a href="/auth/google">{displayName} with Google</a> */}
     </div>
   )
 }
 
+function validateEmail(email) {
+  const re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+  return re.test(email)
+}
+
+const notifyEmailError = () => toast.error('Please enter a valid email address')
 /**
  * CONTAINER
  *   Note that we have two different sets of 'mapStateToProps' functions -
@@ -76,6 +84,10 @@ const mapDispatch = dispatch => {
       const formName = evt.target.name
       const email = evt.target.email.value
       const password = evt.target.password.value
+      if (!validateEmail(email)) {
+        notifyEmailError()
+        return
+      }
       dispatch(authenticate(email, password, formName))
     },
     handleSignup(evt) {
@@ -84,6 +96,10 @@ const mapDispatch = dispatch => {
       const email = evt.target.email.value
       const password = evt.target.password.value
       const name = evt.target.name.value
+      if (!validateEmail(email)) {
+        notifyEmailError()
+        return
+      }
       dispatch(authenticateSignup(email, password, formName, name))
     }
   }
