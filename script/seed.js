@@ -19,6 +19,11 @@ async function seed() {
       name: 'Kerri',
       username: 'kerri@gmail.com',
       password: '123'
+    }),
+    User.create({
+      name: 'Robert',
+      username: 'robert@gmail.com',
+      password: '123'
     })
   ])
 
@@ -37,11 +42,66 @@ async function seed() {
       squats: 0,
       pushups: 0,
       dips: 30
+    },
+    {
+      squats: 10,
+      pushups: 0,
+      dips: 0
+    },
+    {
+      squats: 0,
+      pushups: 10,
+      dips: 0
+    },
+    {
+      squats: 0,
+      pushups: 0,
+      dips: 15
+    },
+    {
+      squats: 5,
+      pushups: 0,
+      dips: 0
+    },
+    {
+      squats: 0,
+      pushups: 5,
+      dips: 0
+    },
+    {
+      squats: 0,
+      pushups: 0,
+      dips: 10
+    },
+    {
+      squats: 1,
+      pushups: 0,
+      dips: 0
+    },
+    {
+      squats: 0,
+      pushups: 3,
+      dips: 0
+    },
+    {
+      squats: 0,
+      pushups: 0,
+      dips: 4
     }
   ])
 
   await workouts[0].setUser(users[0])
   await workouts[1].setUser(users[0])
+  await workouts[2].setUser(users[0])
+  await workouts[3].setUser(users[1])
+  await workouts[4].setUser(users[1])
+  await workouts[5].setUser(users[1])
+  await workouts[6].setUser(users[2])
+  await workouts[7].setUser(users[2])
+  await workouts[8].setUser(users[2])
+  await workouts[9].setUser(users[3])
+  await workouts[10].setUser(users[3])
+  await workouts[11].setUser(users[3])
 
   console.log('db synced!')
 
