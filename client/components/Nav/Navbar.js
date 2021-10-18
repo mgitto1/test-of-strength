@@ -39,13 +39,13 @@ class Navbar extends React.Component {
               >
                 Dashboard
               </Link>
-              <Link
+              {/* <Link
                 to="/workout-plan"
                 onClick={this.handleClick}
                 className={'/workout-plan' === location ? 'selected' : ''}
               >
                 Workout Plan
-              </Link>
+              </Link> */}
               <a href="#" onClick={this.props.handleClick}>
                 Logout
               </a>
