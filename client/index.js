@@ -1,19 +1,19 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import {Provider} from 'react-redux'
+import './index.css'
+import App from './App'
 import {Router} from 'react-router-dom'
-import history from './history'
+import history from './util/history'
+import {Provider} from 'react-redux'
 import store from './store'
-import App from './app'
-
-// establishes socket connection
-import './socket'
 
 ReactDOM.render(
-  <Provider store={store}>
-    <Router history={history}>
-      <App />
-    </Router>
-  </Provider>,
-  document.getElementById('app')
+  <React.StrictMode>
+    <Provider store={store}>
+      <Router history={history}>
+        <App />
+      </Router>
+    </Provider>
+  </React.StrictMode>,
+  document.getElementById('root')
 )

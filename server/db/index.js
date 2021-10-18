@@ -1,6 +1,13 @@
 const db = require('./db')
 
-// register models
-require('./models')
+const User = require('./models/user')
+const Workout = require('./models/workout')
 
-module.exports = db
+User.hasMany(Workout)
+Workout.belongsTo(User)
+
+module.exports = {
+  db,
+  User,
+  Workout
+}

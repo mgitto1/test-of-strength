@@ -1,70 +1,85 @@
-const crypto = require('crypto')
 const Sequelize = require('sequelize')
 const db = require('../db')
+require('dotenv').config()
+const jwt = require('jsonwebtoken')
+const bcrypt = require('bcrypt')
+const axios = require('axios')
+
+const SALT_ROUNDS = 5
 
 const User = db.define('user', {
-  email: {
+  name: {
+    type: Sequelize.STRING,
+    allowNull: false
+  },
+  username: {
     type: Sequelize.STRING,
     unique: true,
     allowNull: false
   },
   password: {
-    type: Sequelize.STRING,
-    // Making `.password` act like a func hides it when serializing to JSON.
-    // This is a hack to get around Sequelize's lack of a "private" option.
-    get() {
-      return () => this.getDataValue('password')
-    }
-  },
-  salt: {
-    type: Sequelize.STRING,
-    // Making `.salt` act like a function hides it when serializing to JSON.
-    // This is a hack to get around Sequelize's lack of a "private" option.
-    get() {
-      return () => this.getDataValue('salt')
-    }
-  },
-  googleId: {
     type: Sequelize.STRING
+  },
+  isAdmin: {
+    type: Sequelize.BOOLEAN,
+    defaultValue: false
   }
 })
 
 module.exports = User
 
-/**
- * instanceMethods
- */
+// /**
+//  * instanceMethods
+
 User.prototype.correctPassword = function(candidatePwd) {
-  return User.encryptPassword(candidatePwd, this.salt()) === this.password()
+  return bcrypt.compare(candidatePwd, this.password)
+}
+
+User.prototype.generateToken = function() {
+  return jwt.sign({id: this.id}, process.env.SECRET)
 }
 
 /**
  * classMethods
  */
-User.generateSalt = function() {
-  return crypto.randomBytes(16).toString('base64')
+User.authenticate = async function({username, password}) {
+  const user = await this.findOne({where: {username}})
+  if (!user || !await user.correctPassword(password)) {
+    const error = Error('Incorrect username/password')
+    error.status = 401
+    throw error
+  }
+  return user.generateToken()
 }
 
-User.encryptPassword = function(plainText, salt) {
-  return crypto
-    .createHash('RSA-SHA256')
-    .update(plainText)
-    .update(salt)
-    .digest('hex')
+User.findByToken = async function(token) {
+  try {
+    const {id} = await jwt.verify(token, process.env.SECRET)
+    const user = User.findByPk(id)
+    if (!user) {
+      throw 'nooo'
+    }
+    return user
+  } catch (ex) {
+    const error = Error('bad token')
+    error.status = 401
+    throw error
+  }
 }
 
 /**
  * hooks
  */
-const setSaltAndPassword = user => {
+const hashPassword = async user => {
+  console.log('hashing')
+  //in case the password has been changed, we want to encrypt it with bcrypt
   if (user.changed('password')) {
-    user.salt = User.generateSalt()
-    user.password = User.encryptPassword(user.password(), user.salt())
+    user.password = await bcrypt.hash(user.password, SALT_ROUNDS)
   }
 }
 
-User.beforeCreate(setSaltAndPassword)
-User.beforeUpdate(setSaltAndPassword)
+User.beforeCreate(hashPassword)
+User.beforeUpdate(hashPassword)
 User.beforeBulkCreate(users => {
-  users.forEach(setSaltAndPassword)
+  users.forEach(hashPassword)
 })

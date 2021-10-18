@@ -1,24 +1,62 @@
-'use strict'
+const {db, User, Workout} = require('../server/db')
+// const Product = require('../server/db/models/product')
 
-const db = require('../server/db')
-const {User} = require('../server/db/models')
+/**
+ * seed - this function clears the database, updates tables to
+ *      match the models, and populates the database.
+ */
 
 async function seed() {
-  await db.sync({force: true})
-  console.log('db synced!')
-
+  await db.sync({force: true}) // clears db and matches models to tables
   const users = await Promise.all([
-    User.create({email: 'cody@email.com', password: '123'}),
-    User.create({email: 'murphy@email.com', password: '123'})
+    User.create({name: 'Cody', username: 'cody@gmail.com', password: '123'}),
+    User.create({
+      name: 'Murphy',
+      username: 'murphy@gmail.com',
+      password: '123'
+    }),
+    User.create({
+      name: 'Kerri',
+      username: 'kerri@gmail.com',
+      password: '123'
+    })
   ])
+
+  const workouts = await Workout.bulkCreate([
+    {
+      squats: 20,
+      pushups: 0,
+      dips: 0
+    },
+    {
+      squats: 0,
+      pushups: 20,
+      dips: 0
+    },
+    {
+      squats: 0,
+      pushups: 0,
+      dips: 30
+    }
+  ])
+
+  await workouts[0].setUser(users[0])
+  await workouts[1].setUser(users[0])
+
+  console.log('db synced!')
 
   console.log(`seeded ${users.length} users`)
   console.log(`seeded successfully`)
+
+  console.log(`seeded ${workouts.length} products`)
+  console.log(`seeded successfully`)
 }
 
-// We've separated the `seed` function from the `runSeed` function.
-// This way we can isolate the error handling and exit trapping.
-// The `seed` function is concerned only with modifying the database.
+/*
+ We've separated the `seed` function from the `runSeed` function.
+ This way we can isolate the error handling and exit trapping.
+ The `seed` function is concerned only with modifying the database.
+*/
 async function runSeed() {
   console.log('seeding...')
   try {
@@ -33,9 +71,11 @@ async function runSeed() {
   }
 }
 
-// Execute the `seed` function, IF we ran this module directly (`node seed`).
-// `Async` functions always return a promise, so we can use `catch` to handle
-// any errors that might occur inside of `seed`.
+/*
+  Execute the `seed` function, IF we ran this module directly (`node seed`).
+  `Async` functions always return a promise, so we can use `catch` to handle
+  any errors that might occur inside of `seed`.
+*/
 if (module === require.main) {
   runSeed()
 }
