@@ -52,8 +52,6 @@ const Squat = () => {
       const calculateAvg = (avgPosition, helperObj) => {
         if (pose.score > 0.5 && count <= 50) {
           localStorage.setItem('CameraStatus', 'Calculating')
-          console.log('calculating')
-          console.log(pose.score)
           avgPosition.push(leftShoulder)
           avgPosition.push(rightShoulder)
           const sum = avgPosition.reduce((a, b) => a + b, 0)

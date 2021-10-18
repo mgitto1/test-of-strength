@@ -52,7 +52,6 @@ const Pushup = () => {
       // Calculate user position
       const calculateAvg = (avgPosition, helperObj) => {
         if (pose.score > 0.5 && count <= 50) {
-          console.log('calculating')
           avgPosition.push(leftEye)
           avgPosition.push(rightEye)
           const sum = avgPosition.reduce((a, b) => a + b, 0)
@@ -69,7 +68,7 @@ const Pushup = () => {
       const pushup = () => {
         let pushupObj = calculateAvg(avgPosition, helperObj)
         if (pushupObj.count === 50) {
-          console.log('running')
+          // console.log('running')
           if (leftEye && rightEye <= pushupObj.avg + 100) {
             position = 'up'
           } else {

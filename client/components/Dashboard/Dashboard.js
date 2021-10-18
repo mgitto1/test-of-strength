@@ -1,3 +1,4 @@
+/* eslint-disable complexity */
 import axios from 'axios'
 import React from 'react'
 import {connect} from 'react-redux'
@@ -36,9 +37,9 @@ export class Dashboard extends React.Component {
       let pushupRank = []
       let dipRank = []
       for (let i = 0; i < workout.length; i++) {
-        squatRank.push(workout[i].squats)
-        pushupRank.push(workout[i].pushups)
-        dipRank.push(workout[i].dips)
+        if (workout[i].squats !== 0) squatRank.push(workout[i].squats)
+        if (workout[i].pushups !== 0) pushupRank.push(workout[i].pushups)
+        if (workout[i].dips !== 0) dipRank.push(workout[i].dips)
       }
       squatRank.sort((a, b) => a - b)
       pushupRank.sort((a, b) => a - b)
@@ -50,6 +51,7 @@ export class Dashboard extends React.Component {
   }
 
   async calculate() {
+    ///Calculates maxes for individual
     let maxSquats = 0
     let maxPushups = 0
     let maxDips = 0

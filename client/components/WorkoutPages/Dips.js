@@ -50,7 +50,6 @@ const Dips = () => {
       // Calculate user position
       const calculateAvg = (avgPosition, helperObj) => {
         if (pose.score > 0.5 && count <= 50) {
-          console.log('calculating')
           avgPosition.push(leftEye)
           avgPosition.push(rightEye)
           const sum = avgPosition.reduce((a, b) => a + b, 0)
@@ -67,7 +66,7 @@ const Dips = () => {
       const dip = () => {
         let dipObj = calculateAvg(avgPosition, helperObj)
         if (dipObj.count === 50) {
-          console.log('running')
+          // console.log('running')
           if (leftEye && rightEye <= dipObj.avg + 100) {
             position = 'up'
           } else {
